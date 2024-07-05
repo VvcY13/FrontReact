@@ -1,21 +1,21 @@
 import { useState } from "react"
+import Swal from "sweetalert2";
 
 
 export default function FormularioQuejas() {
-  const[asunto, setAsunto]=useState('');
-  const[comentario, setComentario]=useState('');
+  const [asunto, setAsunto] = useState('');
+  const [comentario, setComentario] = useState('');
 
-  const handleSubmit = async (e) =>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem('token');
-    if(!token){
+    if (!token) {
       console.error("token no encontrado")
       return;
     }
     const payload = JSON.parse(atob(token.split('.')[1]));
-    console.log("Payload del token:", payload.sub); // Verificar el payload
-    const id_personal = parseInt(payload.sub, 10); // Convertir `sub` a entero
+    const id_personal = parseInt(payload.sub, 10); 
 
     const queja = {
       id_personal,
@@ -23,23 +23,26 @@ export default function FormularioQuejas() {
       comentario
     };
 
-    try{
-      const response = await fetch("http://localhost:8000/api/quejasyreclamos",{
+    try {
+      const response = await fetch("http://localhost:8000/api/quejasyreclamos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
-      },
-      body:JSON.stringify(queja),
-    });
+        },
+        body: JSON.stringify(queja),
+      });
 
-    const data = await response.json();
-    if(response.ok){
-      console.log("queja enviada", data);
-    }else{
-      console.error("error al enviar la queja", data);
-    }
-    }catch(error){
+      const data = await response.json();
+      if (response.ok) {
+        Swal.fire('Enviado', response.data, 'success');
+        setAsunto("");
+        setComentario("");
+
+      } else {
+        console.error("error al enviar la queja", data);
+      }
+    } catch (error) {
       console.error("error al enviar la queja catch", error);
     }
 
@@ -48,17 +51,22 @@ export default function FormularioQuejas() {
   return (
     <div className="container-fluid" style={{ display: "flex", flexWrap: "nowrap", flexDirection: "column", width: "50rem", marginTop: "3rem" }}>
       <form onSubmit={handleSubmit}>
+
         <div className="mb-3" style={{ alignSelf: "center", width: "40rem" }}>
-          <label className="form-label">Asunto</label>
-          <input
-            type="text"
-            className="form-control"
+          <label htmlFor="asunto" className="form-label">Asunto</label>
+          <select
+            className="form-select"
             id="exampleFormControlInput1"
-            placeholder="Escribir el Asunto"
             value={asunto}
             onChange={(e) => setAsunto(e.target.value)}
-          />
+          >
+            <option value="">Seleccione un asunto</option>
+            <option value="Quejas">QUEJAS</option>
+            <option value="Sugerencias">SUGERENCIAS</option>
+            <option value="Opiniones">OPINIONES</option>
+          </select>
         </div>
+
         <div className="mb-3" style={{ alignSelf: "center", width: "40rem" }}>
           <label className="form-label">Mensaje</label>
           <textarea

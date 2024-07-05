@@ -86,9 +86,8 @@ export default function AdministradorPersonal() {
   <div class="mb-3">
       <label for="tipo_documento" class="form-label">Tipo de Documento</label>
       <select class="form-select" id="tipo_documento">
-          <option value="1">DNI</option>
-          <option value="2">Cédula</option>
-          <!-- Agrega más opciones según necesites -->
+          <option value="DNI">DNI</option>
+          <option value="Carnet_Extranjeria">Carnet de Extranjeria</option>
       </select>
   </div>
   <div class="mb-3">
@@ -100,17 +99,17 @@ export default function AdministradorPersonal() {
       focusConfirm: false,
       confirmButtonText: 'Registrar',
       preConfirm: async () => {
-                const nombres = document.getElementById('nombres').value;
-                const apellidos = document.getElementById('apellidos').value;
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const direccion = document.getElementById('direccion').value;
-                const provincia = document.getElementById('provincia').value;
-                const distrito = document.getElementById('distrito').value;
-                const tipo_documento = document.getElementById('tipo_documento').value;
-                const numero_documento = document.getElementById('numero_documento').value;
+        const nombres = document.getElementById('nombres').value;
+        const apellidos = document.getElementById('apellidos').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const direccion = document.getElementById('direccion').value;
+        const provincia = document.getElementById('provincia').value;
+        const distrito = document.getElementById('distrito').value;
+        const tipo_documento = document.getElementById('tipo_documento').value;
+        const numero_documento = document.getElementById('numero_documento').value;
 
-        if (!nombres ||!apellidos || !email|| !password || !direccion || !provincia || !distrito || !tipo_documento || !numero_documento) {
+        if (!nombres || !apellidos || !email || !password || !direccion || !provincia || !distrito || !tipo_documento || !numero_documento) {
           Swal.showValidationMessage('Por favor complete todos los campos');
           return false;
         }
@@ -128,36 +127,33 @@ export default function AdministradorPersonal() {
       }
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const formData = new FormData();
-        formData.append('nombres', result.value.nombres);
-        formData.append('apellidos', result.value.apellidos);
-        formData.append('email', result.value.email);
-        formData.append('password', result.value.password);
-        formData.append('direccion', result.value.direccion);
-        formData.append('provincia', result.value.provincia);
-        formData.append('distrito', result.value.distrito);
-        formData.append('tipo_documento', result.value.tipo_documento);
-        formData.append('numero_documento', result.value.numero_documento)
         try {
-          const response = await axios.post('http://127.0.0.1:8000/api/personal', formData, {
+          const response = await axios.post('http://127.0.0.1:8000/api/personal', result.value, {
             headers: {
-              'Content-Type': 'multipart/form-data'
+              'Content-Type': 'application/json'
             }
           });
           if (response.status === 201) {
-            Swal.fire('Exito', 'Personal registrado exitosamente', 'success');
+            Swal.fire('Éxito', 'Personal registrado exitosamente', 'success');
             cargarPersonals();
-            console.log(response.data);
           } else {
             Swal.fire('Error', 'Error al registrar producto', 'error');
           }
         } catch (error) {
-          console.error('Error al registrar personal', error)
-          Swal.fire('Error', 'Error al registrar personal', 'error');
+          if (error.response && error.response.data) {
+            const validationErrors = error.response.data.errors;
+            let errorMessages = '';
+            for (let key in validationErrors) {
+              errorMessages += `${validationErrors[key].join(' ')}\n`;
+            }
+            Swal.fire('Error', errorMessages, 'error');
+          } else {
+            Swal.fire('Error', 'Error al registrar personal', 'error');
+          }
         }
-
       }
     });
+    
   };
 
   const handleEditar = (id) => {
