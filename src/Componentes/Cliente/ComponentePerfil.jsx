@@ -29,15 +29,15 @@ export default function ComponentePerfil() {
     }
 
     return (
-    <div className="container-fluid d-flex flex-wrap m-5">
-      <div className="container-fluid">
-        <img src={imagenusuario} alt="Imagen de usuario" style={{ width: '300px', height: '200px', objectFit: 'cover' }} />
+    <div className="container-fluid d-flex flex-wrap m-3" style={{background:"#DCEDC8"}}>
+      <div className="container-fluid d-flex">
+        <img src={imagenusuario} alt="" style={{ width: '500px', height: '400px'}} />
       </div>
-      <div className="card-body p-3 text-black">
+      <div className="card-body text-black">
         <div className="mb-1 text-body">
           <p className="lead fw-normal mb-1">Información</p>
-          <div className="p-4 bg-body-tertiary">
-            <div className="row">
+          <div className="bg-body-tertiary">
+            <div className="row m-3 p-5" style={{border:"solid 7px"}}>
               <div className="col-md-6">
                 <h5>Nombres</h5>
                 <p className="font-italic mb-1">{user.nombres}</p>

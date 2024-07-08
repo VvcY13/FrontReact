@@ -41,7 +41,7 @@ export default function BotonLogin() {
 
                         const parsedRol = parseInt(rol, 10);
                         if (parsedRol === 0) {
-                            navigate('/administradorHome');
+                            navigate('/administradorPerfil');
                         } else if (parsedRol === 1) {
                             navigate('/ClientePromociones');
                         }

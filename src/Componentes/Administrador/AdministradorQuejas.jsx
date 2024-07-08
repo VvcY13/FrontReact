@@ -1,3 +1,4 @@
+import ComponenteQuejas from "./ComponenteQuejas";
 import SubNavBarAdministrador from "./subNavBarAdministrador";
 
 export default function AdministradorQuejas() {
@@ -5,7 +6,7 @@ export default function AdministradorQuejas() {
     <div className="container-fluid p-0">
     <SubNavBarAdministrador/>
     <div className="container-fluid p-0">
-      Bienvenido al Quejas y Reclamos del Admin
+      <ComponenteQuejas />
     </div>
   </div>
   )

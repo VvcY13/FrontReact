@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function AdministradorComponenteCompras() {
     const [ventas, setVentas] = useState([]);
@@ -17,10 +18,24 @@ export default function AdministradorComponenteCompras() {
             console.error('Error al obtener todas las ventas:', error);
         }
     };
+
+    const calcularTotalVentas = () => {
+        const total = ventas.reduce((acc, venta) => acc + parseFloat(venta.total), 0);
+        Swal.fire({
+            title: 'Total de Ventas',
+            text: `El total de todas las ventas es: ${total.toFixed(2)}`,
+            icon: 'info',
+            confirmButtonText: 'Cerrar'
+        });
+    };
+
     return (
         <div className="container-fluid p-5 mt-2">
             <div className="container-fluid m-0 d-flex flex-column">
-                <h2>Todas las Ventas</h2>
+                <h2>Ventas</h2>
+                <button onClick={calcularTotalVentas} className="btn btn-primary mb-3">
+                    Ver Total de Ventas
+                </button>
 
                 <table className="table">
                     <thead>
