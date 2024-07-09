@@ -36,7 +36,7 @@ export default function ComponentePerfil() {
       <div className="card-body text-black">
         <div className="mb-1 text-body">
           <p className="lead fw-normal mb-1">Información</p>
-          <div className="bg-body-tertiary">
+          <div className="bg-body-tertiary" >
             <div className="row m-3 p-5" style={{border:"solid 7px"}}>
               <div className="col-md-6">
                 <h5>Nombres</h5>
